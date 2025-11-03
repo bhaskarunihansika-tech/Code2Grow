@@ -1,0 +1,118 @@
+#include <stdio.h>
+
+int main() {
+    int totalCustomers, i, j;
+    
+    // Updated Menu details
+    int codes[] = {101, 102, 103, 104, 105, 106};
+    char *names[] = {"Veg Roll", "Chicken Wrap", "Cheese Pizza", "Cold Coffee", "Lemon Soda", "Chocolate Cake"};
+    int prices[] = {90, 150, 200, 80, 60, 120};
+    int menuItems = 6;
+    
+    printf("Enter total number of customers: ");
+    scanf("%d", &totalCustomers);
+    
+    float totalRevenue = 0;
+
+    printf("\n=========== Smart Canteen Billing System ===========\n");
+
+    for (i = 1; i <= totalCustomers; i++) {
+        int numItems, itemCode, quantity;
+        float customerTotal = 0;
+        
+        printf("\n--- Customer %d ---\n", i);
+
+        // Display menu
+        printf("\nAvailable Menu:\n");
+        printf("----------------------------------------------------\n");
+        printf("Code\tItem Name\t\tPrice (₹)\n");
+        printf("----------------------------------------------------\n");
+        for (j = 0; j < menuItems; j++) {
+            printf("%d\t%-20s ₹%d\n", codes[j], names[j], prices[j]);
+        }
+        printf("----------------------------------------------------\n");
+
+        printf("Enter number of different items: ");
+        scanf("%d", &numItems);
+
+        // Arrays to store ordered items
+        int orderedCodes[numItems], orderedQuantities[numItems], orderedPrices[numItems];
+
+        for (j = 0; j < numItems; j++) {
+            int validCode = 0;
+            int pricePerItem = 0;
+
+            // Validate item code
+            while (!validCode) {
+                printf("\nEnter item code: ");
+                scanf("%d", &itemCode);
+                for (int k = 0; k < menuItems; k++) {
+                    if (codes[k] == itemCode) {
+                        pricePerItem = prices[k];
+                        validCode = 1;
+                        break;
+                    }
+                }
+                if (!validCode) {
+                    printf("❌ Invalid code! Please enter a valid item code.\n");
+                }
+            }
+
+            // Validate quantity
+            do {
+                printf("Enter quantity: ");
+                scanf("%d", &quantity);
+                if (quantity <= 0) {
+                    printf("❌ Quantity must be greater than 0.\n");
+                }
+            } while (quantity <= 0);
+
+            float itemTotal = pricePerItem * quantity;
+            customerTotal += itemTotal;
+
+            orderedCodes[j] = itemCode;
+            orderedQuantities[j] = quantity;
+            orderedPrices[j] = pricePerItem;
+        }
+
+        // Discount calculation
+        float discount = 0;
+        if (customerTotal > 800) {  // Changed discount condition
+            discount = customerTotal * 0.15f; // 15% discount
+        }
+
+        float finalBill = customerTotal - discount;
+        totalRevenue += finalBill;
+
+        // Print customer bill
+        printf("\n============= Customer %d Bill =============\n", i);
+        printf("Item\t\tQty\tRate\tAmount\n");
+        printf("-------------------------------------------\n");
+        for (j = 0; j < numItems; j++) {
+            for (int k = 0; k < menuItems; k++) {
+                if (codes[k] == orderedCodes[j]) {
+                    printf("%-15s %d\t₹%d\t₹%.2f\n",
+                           names[k],
+                           orderedQuantities[j],
+                           orderedPrices[j],
+                           (float)(orderedQuantities[j] * orderedPrices[j]));
+                }
+            }
+        }
+        printf("-------------------------------------------\n");
+        printf("Total:\t\t\t\t₹%.2f\n", customerTotal);
+        if (discount > 0) {
+            printf("Discount (15%%):\t\t-₹%.2f\n", discount);
+        }
+        printf("Final Bill:\t\t\t₹%.2f\n", finalBill);
+        printf("===========================================\n");
+    }
+
+    // Canteen summary
+    printf("\n================== Canteen Summary ==================\n");
+    printf("Total Customers Served:\t%d\n", totalCustomers);
+    printf("Total Revenue:\t\t₹%.2f\n", totalRevenue);
+    printf("=====================================================\n");
+
+    return 0;
+}
