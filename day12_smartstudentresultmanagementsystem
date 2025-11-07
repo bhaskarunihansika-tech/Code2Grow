@@ -1,0 +1,93 @@
+#include <stdio.h>
+
+int main() {
+    int n, i, j, choice;
+    float m1, m2, m3, total, avg;
+    int passCount = 0, failCount = 0;
+    float classTotal = 0, highestAvg = 0, lowestAvg = 100;
+
+    printf("Smart Student Result Management\n");
+    printf("Enter number of students: ");
+    scanf("%d", &n);
+
+    // Variables to store overall results
+    float allAvgSum = 0;
+    float studentAvg;
+    float totalStudents = n;
+
+    // Data entry and grade calculation
+    i = 1;
+    while (i <= n) {
+        printf("\n--- Student %d ---\n", i);
+        printf("Enter marks for Subject 1: ");
+        scanf("%f", &m1);
+        printf("Enter marks for Subject 2: ");
+        scanf("%f", &m2);
+        printf("Enter marks for Subject 3: ");
+        scanf("%f", &m3);
+
+        total = m1 + m2 + m3;
+        avg = total / 3.0;
+        allAvgSum += avg;
+
+        if (avg > highestAvg)
+            highestAvg = avg;
+        if (avg < lowestAvg)
+            lowestAvg = avg;
+
+        printf("Total Marks = %.2f\n", total);
+        printf("Average = %.2f\n", avg);
+
+        if (avg >= 90)
+            printf("Grade: A+\n");
+        else if (avg >= 80)
+            printf("Grade: A\n");
+        else if (avg >= 70)
+            printf("Grade: B\n");
+        else if (avg >= 60)
+            printf("Grade: C\n");
+        else if (avg >= 50)
+            printf("Grade: D\n");
+        else
+            printf("Grade: Fail\n");
+
+        if (avg >= 50)
+            passCount++;
+        else
+            failCount++;
+
+        i++;
+    }
+
+    // Menu
+    do {
+        printf("\n===== Menu =====\n");
+        printf("1. View All Results\n");
+        printf("2. View Class Summary\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        if (choice == 1) {
+            printf("\n--- Result Sheet ---\n");
+            printf("Each student’s total and average already shown above.\n");
+        } 
+        else if (choice == 2) {
+            printf("\n--- Class Summary ---\n");
+            printf("Total number of students: %d\n", n);
+            printf("Passed: %d\n", passCount);
+            printf("Failed: %d\n", failCount);
+            printf("Class Average Marks: %.2f\n", allAvgSum / totalStudents);
+            printf("Highest Average: %.2f\n", highestAvg);
+            printf("Lowest Average: %.2f\n", lowestAvg);
+        } 
+        else if (choice == 3) {
+            printf("Exiting...\n");
+        } 
+        else {
+            printf("Invalid choice. Try again.\n");
+        }
+    } while (choice != 3);
+
+    return 0;
+}
