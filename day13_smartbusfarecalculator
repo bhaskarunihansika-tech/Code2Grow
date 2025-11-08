@@ -2,7 +2,7 @@
 
 int main() {
     int n, i = 1;
-    char name[50];  // temporary use (primitive char array is allowed for input)
+    char name[50];   
     int age;
     float distance, time;
     float baseFare, discount = 0, fare, totalRevenue = 0;
