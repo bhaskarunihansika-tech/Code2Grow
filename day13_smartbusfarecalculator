@@ -1,0 +1,86 @@
+#include <stdio.h>
+
+int main() {
+    int n, i = 1;
+    char name[50];  // temporary use (primitive char array is allowed for input)
+    int age;
+    float distance, time;
+    float baseFare, discount = 0, fare, totalRevenue = 0;
+    float minFare = 999999, maxFare = 0;
+    int totalPassengers = 0;
+
+    printf("========= SRM Smart Bus Fare Calculator =========\n");
+    printf("Enter number of passengers: ");
+    scanf("%d", &n);
+
+    while (i <= n) {
+        printf("\n--- Passenger %d ---\n", i);
+
+        printf("Enter name: ");
+        scanf("%s", name);
+
+        printf("Enter age: ");
+        scanf("%d", &age);
+
+        printf("Enter distance (in km): ");
+        scanf("%f", &distance);
+
+        printf("Enter travel time (24-hour format): ");
+        scanf("%f", &time);
+
+        baseFare = distance * 10;  // ₹10 per km
+
+        // Apply discounts
+        if (age < 12) {
+            discount = 0.5 * baseFare;
+        } else if (age >= 60) {
+            discount = 0.3 * baseFare;
+        } else {
+            discount = 0;
+        }
+
+        fare = baseFare - discount;
+
+        // Apply peak hour surcharge (8–10 AM or 5–8 PM)
+        if ((time >= 8 && time < 10) || (time >= 17 && time < 20)) {
+            fare = fare + (0.2 * fare);
+        }
+
+        // Minimum fare ₹20
+        if (fare < 20)
+            fare = 20;
+
+        printf("Passenger: %s | Base Fare: ₹%.2f", name, baseFare);
+
+        // Show discount info
+        if (age < 12)
+            printf(" | Child Discount Applied");
+        else if (age >= 60)
+            printf(" | Senior Citizen Discount Applied");
+
+        // Show peak hour info
+        if ((time >= 8 && time < 10) || (time >= 17 && time < 20))
+            printf(" | Peak Hour Surcharge Applied");
+
+        printf(" | Final Fare: ₹%.2f\n", fare);
+
+        totalRevenue += fare;
+        totalPassengers++;
+
+        // Track highest & lowest fare
+        if (fare < minFare)
+            minFare = fare;
+        if (fare > maxFare)
+            maxFare = fare;
+
+        i++;
+    }
+
+    printf("\n========= DAILY SUMMARY =========\n");
+    printf("Total Passengers: %d\n", totalPassengers);
+    printf("Total Revenue Collected: ₹%.2f\n", totalRevenue);
+    printf("Highest Fare of the Day: ₹%.2f\n", maxFare);
+    printf("Lowest Fare of the Day: ₹%.2f\n", minFare);
+
+    return 0;
+}
