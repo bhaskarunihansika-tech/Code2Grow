@@ -1,0 +1,102 @@
+#include <stdio.h>
+
+int main() {
+    int total_customers, i;
+    int room_type, days;
+    char name[50];
+    char breakfast, wifi, gym;
+    float rate = 0, base_fare, add_services = 0, subtotal, discount = 0, gst, total;
+    float total_revenue = 0, highest_bill = 0, lowest_bill = 999999;
+    int total_rooms = 0;
+
+    printf("======= Smart Hotel Room Booking System =======\n");
+    printf("Enter total number of customers: ");
+    scanf("%d", &total_customers);
+
+    for (i = 1; i <= total_customers; i++) {
+        printf("\n--- Customer %d ---\n", i);
+
+        printf("Enter name: ");
+        scanf("%s", name);
+
+        printf("Enter room type (1-Deluxe, 2-Super Deluxe, 3-Suite): ");
+        scanf("%d", &room_type);
+
+        printf("Enter number of days: ");
+        scanf("%d", &days);
+
+        // Select room rate
+        if (room_type == 1)
+            rate = 2500;
+        else if (room_type == 2)
+            rate = 4000;
+        else if (room_type == 3)
+            rate = 6000;
+        else {
+            printf("Invalid room type! Skipping customer...\n");
+            continue;
+        }
+
+        // Base Fare
+        base_fare = rate * days;
+        total_rooms++;
+
+        // Additional services
+        printf("Breakfast (Y/N): ");
+        scanf(" %c", &breakfast);
+        if (breakfast == 'Y' || breakfast == 'y')
+            add_services += 300 * days;
+
+        printf("Wi-Fi (Y/N): ");
+        scanf(" %c", &wifi);
+        if (wifi == 'Y' || wifi == 'y')
+            add_services += 100 * days;
+
+        printf("Gym Access (Y/N): ");
+        scanf(" %c", &gym);
+        if (gym == 'Y' || gym == 'y')
+            add_services += 200 * days;
+
+        // Subtotal before taxes and discounts
+        subtotal = base_fare + add_services;
+
+        // Discount if subtotal > 10000
+        if (subtotal > 10000)
+            discount = subtotal * 0.10;
+
+        subtotal -= discount;
+
+        // GST = 12%
+        gst = subtotal * 0.12;
+        total = subtotal + gst;
+
+        // Display customer bill
+        printf("\n====== BILL FOR CUSTOMER: %s ======\n", name);
+        printf("Base Fare: ₹%.2f\n", base_fare);
+        printf("Additional Services: ₹%.2f\n", add_services);
+        printf("Discount: ₹%.2f\n", discount);
+        printf("GST (12%%): ₹%.2f\n", gst);
+        printf("Total Bill: ₹%.2f\n", total);
+        printf("====================================\n");
+
+        // Update hotel summary
+        total_revenue += total;
+        if (total > highest_bill)
+            highest_bill = total;
+        if (total < lowest_bill)
+            lowest_bill = total;
+
+        // Reset add_services for next customer
+        add_services = 0;
+    }
+
+    // Hotel Summary
+    printf("\n======= HOTEL SUMMARY =======\n");
+    printf("Total Rooms Booked: %d\n", total_rooms);
+    printf("Total Revenue: ₹%.2f\n", total_revenue);
+    printf("Highest Bill: ₹%.2f\n", highest_bill);
+    printf("Lowest Bill: ₹%.2f\n", lowest_bill);
+    printf("==============================\n");
+
+    return 0;
+}
