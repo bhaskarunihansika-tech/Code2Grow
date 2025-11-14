@@ -1,0 +1,125 @@
+// Name: B.Hansika
+// Registration Number: AP25110090154
+// Inventory Management System - Day 18 Mission
+
+#include <stdio.h>
+
+int main() {
+    int productID[10];
+    char productName[10][50];
+    int quantity[10];
+    float price[10];
+    int n = 0;  // number of products entered
+
+    int choice;
+
+    while (1) {
+        printf("\n INVENTORY MANAGEMENT SYSTEM \n");
+        printf("1. Input product details\n");
+        printf("2. Display all products\n");
+        printf("3. Inventory value, highest & lowest value products\n");
+        printf("4. Search product by ID\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        // OPTION 1: Input product details
+        if (choice == 1) {
+            printf("How many products do you want to enter (max 10)? ");
+            scanf("%d", &n);
+
+            if (n > 10 || n <= 0) {
+                printf("Invalid number! Enter between 1 to 10.\n");
+                continue;
+            }
+
+            for (int i = 0; i < n; i++) {
+                printf("\nEnter details of product %d:\n", i + 1);
+
+                printf("Product ID: ");
+                scanf("%d", &productID[i]);
+
+                printf("Product Name: ");
+                scanf("%s", productName[i]);
+
+                printf("Quantity in stock: ");
+                scanf("%d", &quantity[i]);
+
+                printf("Price per item: ");
+                scanf("%f", &price[i]);
+            }
+            printf("\nProducts added successfully!\n");
+        }
+
+        // OPTION 2: Display all products
+        else if (choice == 2) {
+            if (n == 0) {
+                printf("No products available!\n");
+                continue;
+            }
+
+            printf("\n--- PRODUCT LIST ---\n");
+            for (int i = 0; i < n; i++) {
+                printf("\nProduct %d:\n", i + 1);
+                printf("ID: %d\n", productID[i]);
+                printf("Name: %s\n", productName[i]);
+                printf("Quantity: %d\n", quantity[i]);
+                printf("Price: %.2f\n", price[i]);
+            }
+        }
+
+        // OPTION 3: Inventory value + highest + lowest value product
+        else if (choice == 3) {
+            if (n == 0) {
+                printf("No products available!\n");
+                continue;
+            }
+
+            float totalValue = 0;
+            float highestValue = quantity[0] * price[0];
+            float lowestValue = quantity[0] * price[0];
+            int highestIndex = 0, lowestIndex = 0;
+
+            for (int i = 0; i < n; i++) {
+                float value = quantity[i] * price[i];
+                totalValue += value;
+
+                if (value > highestValue) {
+                    highestValue = value;
+                    highestIndex = i;
+                }
+                if (value < lowestValue) {
+                    lowestValue = value;
+                    lowestIndex = i;
+                }
+            }
+
+            printf("\nTotal Inventory Value: %.2f\n", totalValue);
+
+            printf("\nProduct with Highest Value:\n");
+            printf("ID: %d, Name: %s, Value: %.2f\n",
+                   productID[highestIndex], productName[highestIndex], highestValue);
+
+            printf("\nProduct with Lowest Value:\n");
+            printf("ID: %d, Name: %s, Value: %.2f\n",
+                   productID[lowestIndex], productName[lowestIndex], lowestValue);
+        }
+
+        // OPTION 4: Search product by ID
+        else if (choice == 4) {
+            if (n == 0) {
+                printf("No products available!\n");
+                continue;
+            }
+
+            int searchID, found = 0;
+            printf("Enter Product ID to search: ");
+            scanf("%d", &searchID);
+
+            for (int i = 0; i < n; i++) {
+                if (productID[i] == searchID) {
+                    printf("\nProduct Found:\n");
+                    printf("ID: %d\n", productID[i]);
+                    printf("Name: %s\n", productName[i]);
+                    printf("Quantity: %d\n", quantity[i]);
+                    pri
