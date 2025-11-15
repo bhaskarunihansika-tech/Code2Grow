@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    int attendance[5][5];
+    int marks[5][5];
+    char names[5][50];
+
+    int i, j;
+
+    //  INPUT PHASE 
+    printf("Enter names of 5 students:\n");
+    for (i = 0; i < 5; i++) {
+        printf("Student %d name: ", i + 1);
+        scanf("%s", names[i]);
+    }
+
+    printf("\nEnter Attendance Matrix (1 = Present, 0 = Absent):\n");
+    for (i = 0; i < 5; i++) {
+        printf("Student %s attendance for 5 days:\n", names[i]);
+        for (j = 0; j < 5; j++) {
+            scanf("%d", &attendance[i][j]);
+        }
+    }
+
+    printf("\nEnter Marks Matrix (0–100):\n");
+    for (i = 0; i < 5; i++) {
+        printf("Enter 5 subject marks of %s:\n", names[i]);
+        for (j = 0; j < 5; j++) {
+            scanf("%d", &marks[i][j]);
+        }
+    }
+
+    //  PROCESSING PHASE 
+    int totalPresent[5] = {0}, totalAbsent[5] = {0};
+    int totalMarks[5] = {0};
+    float avgMarks[5];
+
+    int highestAttendanceIndex = 0, lowestAttendanceIndex = 0;
+    int highestMarksIndex = 0, lowestMarksIndex = 0;
+
+    // Attendance calculations
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            if (attendance[i][j] == 1)
+                totalPresent[i]++;
+            else
+                totalAbsent[i]++;
+        }
+    }
+
+    // Identify highest & lowest attendance
+    for (i = 1; i < 5; i++) {
+        if (totalPresent[i] > totalPresent[highestAttendanceIndex])
+            highestAttendanceIndex = i;
+        if (totalPresent[i] < totalPresent[lowestAttendanceIndex])
+            lowestAttendanceIndex = i;
+    }
+
+    // Marks calculations
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            totalMarks[i] += marks[i][j];
+        }
+        avgMarks[i] = totalMarks[i] / 5.0;
+    }
+
+    // Identify class topper & lowest performer
+    for (i = 1; i < 5; i++) {
+        if (totalMarks[i] > totalMarks[highestMarksIndex])
+            highestMarksIndex = i;
+        if (totalMarks[i] < totalMarks[lowestMarksIndex])
+            lowestMarksIndex = i;
+    }
+
+    //  OUTPUT PHASE 
+    printf("\n  STUDENT REPORT \n");
+
+    for (i = 0; i < 5; i++) {
+        printf("\nStudent: %s\n", names[i]);
+        printf("Total Present: %d\n", totalPresent[i]);
+        printf("Total Absent : %d\n", totalAbsent[i]);
+        printf("Total Marks  : %d\n", totalMarks[i]);
+        printf("Average Marks: %.2f\n", avgMarks[i]);
+
+        // Grade Assignment
+        char grade;
+        if (avgMarks[i] >= 90) grade = 'A';
+        else if (avgMarks[i] >= 80) grade = 'B';
+        else if (avgMarks[i] >= 70) grade = 'C';
+        else if (avgMarks[i] >= 60) grade = 'D';
+        else grade = 'F';
+
+        printf("Grade        : %c\n", grade);
+    }
+
+    // Summary
+    printf("\n SUMMARY \n");
+    printf("Highest Attendance : %s (%d days present)\n",
+           names[highestAttendanceIndex], totalPresent[highestAttendanceIndex]);
+    printf("Lowest Attendance  : %s (%d days present)\n",
+           names[lowestAttendanceIndex], totalPresent[lowestAttendanceIndex]);
+
+    printf("Class Topper       : %s (Total %d)\n",
+           names[highestMarksIndex], totalMarks[highestMarksIndex]);
+    printf("Lowest Performer   : %s (Total %d)\n",
+           names[lowestMarksIndex], totalMarks[lowestMarksIndex]);
+
+    return 0;
+}
